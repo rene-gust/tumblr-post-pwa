@@ -1,0 +1,20 @@
+version: "2"
+services:
+  webserver:
+    image: nginx:1.13
+    restart: always
+    ports:
+      - 8080:80
+      - 443:443
+    group_add:
+      - www-data
+    volumes:
+      - "./etc/nginx:/etc/nginx/conf.d"
+      - "./etc/ssl/certs:/etc/ssl/certs"
+      - "/mnt/veracrypt1/Kunden/eigene-projekte/05TumblrPosts/production:/var/www"
+      - "/mnt/veracrypt1/Kunden/eigene-projekte/05TumblrPosts/production/var/log:/var/log"
+    networks:
+      - default
+volumes:
+  esdata:
+    driver: local
