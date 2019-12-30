@@ -89,17 +89,37 @@ addBtn.style.display = 'none';
 
     function renderPosts(apiResponse) {
         var itemsHtml = '',
-            plyrIds = [];
+            plyrIds = [],
+            postCounter = 0;
 
         for (let i = 0; i < apiResponse.length; ++i) {
-            itemsHtml += renderPost(apiResponse[i], plyrIds);
-        }
+            itemsHtml = renderPost(apiResponse[i], plyrIds);
 
-        $('#post_list').append(itemsHtml);
+            $('#post_list').append(itemsHtml);
 
-        if (plyrIds.length > 0) {
-            for (let i = 0; i < plyrIds.length; ++i) {
-                initVideoJs(plyrIds[i]);
+            if (plyrIds.length > 0) {
+                for (let i = 0; i < plyrIds.length; ++i) {
+                    initVideoJs(plyrIds[i]);
+                }
+            }
+
+            postCounter++;
+
+            if (postCounter % 7 == 0) {
+                $('#post_list').append(
+                    '<ons-list-item>' +
+                    '    <ons-card>' +
+                    '<ins class="adsbygoogle"' +
+                    '  style="display:block; text-align:center;"' +
+                    '  data-ad-layout="in-article"' +
+                    '  data-ad-format="fluid"' +
+                    '  data-ad-client="ca-pub-9450457991119200"' +
+                    '  data-ad-slot="9433251636">' +
+                    '</ins>' +
+                    '    </ons-card>' +
+                    '</ons-list-item>'
+                );
+                (adsbygoogle = window.adsbygoogle || []).push({});
             }
         }
     }
