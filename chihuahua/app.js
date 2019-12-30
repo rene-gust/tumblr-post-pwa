@@ -71,7 +71,7 @@ addBtn.style.display = 'none';
         requestedTimestamps[requestedLastTimeStamp] = requestedLastTimeStamp;
 
         $.get({
-            url: 'https://tumblr.local/app02/posts/chihuahua/' + lastTimestamp,
+            url: '/app02/posts/chihuahua/' + lastTimestamp,
             success: function (response) {
                 var receivedLastTimestamp = response[response.length - 1].timestamp;
                 console.log(response);
