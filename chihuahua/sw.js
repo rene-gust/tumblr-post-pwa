@@ -19,9 +19,11 @@ self.addEventListener('install', function(e) {
                 '/chihuahua/app.js',
                 'https://unpkg.com/onsenui@2.10.10/css/onsenui.min.css',
                 'https://unpkg.com/onsenui@2.10.10/css/onsen-css-components.min.css',
-                'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css',
+                'https://cdn.plyr.io/3.5.6/plyr.css',
                 'https://unpkg.com/onsenui@2.10.10/js/onsenui.min.js',
-                'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'
+                'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js',
+                'https://cdn.plyr.io/3.5.6/plyr.js',
+                '/chihuahua/favicon.ico'
             ]);
         })
     );

@@ -11,3 +11,28 @@ img {
 .card {
     width:100%;
 }
+
+.post-container .title {
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+    margin: 1em 0;
+}
+
+.post-container .card__content {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 1em 0;
+}
+
+.card .plyr__controls .plyr__control svg {
+    width: 18px;
+    height: 18px;
+}
+
+.card .plyr__control--overlaid svg {
+    left: 26px;
+    top: 24px;
+    width: 120px;
+    height: 120px;
+}

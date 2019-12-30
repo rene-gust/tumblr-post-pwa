@@ -40,26 +40,27 @@ addBtn.style.display = 'none';
         }
     }, true);
 
-    document.querySelector('.page__content').addEventListener('scroll',  function (event) {
+    document.querySelector('.page__content').addEventListener('scroll', function (event) {
         var scrollTopPosition = event.target.scrollTop,
             scrollHeight = event.target.scrollHeight,
             clientHeight = event.target.clientHeight,
             paginateTopPosition = scrollHeight - clientHeight - 500;
 
-            if (scrollTopPosition > paginateTopPosition) {
-                window.setTimeout(
-                    function () {
-                        fetchNextPosts();
-                    },
-                    500
-                )
-            }
+        if (scrollTopPosition > paginateTopPosition) {
+            window.setTimeout(
+                function () {
+                    fetchNextPosts();
+                },
+                500
+            )
+        }
 
     });
 
     var lastTimestamp = 0;
     var receivedTimestamps = {};
     var requestedTimestamps = {};
+
     function fetchNextPosts() {
 
         if (requestedTimestamps[lastTimestamp]) {
@@ -72,7 +73,7 @@ addBtn.style.display = 'none';
         $.get({
             url: 'https://tumblr.local/app02/posts/chihuahua/' + lastTimestamp,
             success: function (response) {
-                var receivedLastTimestamp = response[response.length-1].timestamp;
+                var receivedLastTimestamp = response[response.length - 1].timestamp;
                 console.log(response);
 
                 if (!receivedTimestamps[requestedLastTimeStamp]) {
@@ -87,16 +88,40 @@ addBtn.style.display = 'none';
     }
 
     function renderPosts(apiResponse) {
-        var itemsHtml = '';
+        var itemsHtml = '',
+            plyrIds = [];
 
         for (let i = 0; i < apiResponse.length; ++i) {
-            itemsHtml += renderPost(apiResponse[i]);
+            itemsHtml += renderPost(apiResponse[i], plyrIds);
         }
 
         $('#post_list').append(itemsHtml);
+
+        if (plyrIds.length > 0) {
+            for (let i = 0; i < plyrIds.length; ++i) {
+                initVideoJs(plyrIds[i]);
+            }
+        }
     }
 
-    function renderPost(post) {
+    function initVideoJs(plyrId) {
+        player = new Plyr('#' + plyrId);
+
+        player.on('ready', event => {
+            playButtons = event.detail.plyr.elements.buttons.play;
+            for (let i = 0; i < playButtons.length; ++i) {
+                $element = $(playButtons[i]);
+                if ($element.hasClass('plyr__control--overlaid')) {
+                    $svg = $element.find('svg[role=presentation]');
+                    $svg.attr('viewBox', '0 0 30 30');
+                }
+            }
+        });
+    }
+
+    var plyrIdCounter = 1;
+
+    function renderPost(post, plyrIds) {
         var i = 0,
             date = (new Date(post.timestamp * 1000)).toLocaleString(),
             textContent = '',
@@ -115,6 +140,21 @@ addBtn.style.display = 'none';
         }
 
         if (post.videos) {
+
+            // determine id
+            match = post.videos.embedCode.match(/<video.*id=["'](\S+)["']/);
+            if (match && match.length > 0) {
+                videoContainerId = match[1];
+            }
+            if (!videoContainerId) {
+                videoContainerId = 'plyr-id-' + plyrIdCounter++;
+                post.videos.embedCode = post.videos.embedCode.replace('<video', '<video id="' + videoContainerId + '"');
+            }
+
+            post.videos.embedCode = post.videos.embedCode.replace('<video', '<video id="' + videoContainerId + '"');
+
+            plyrIds.push(videoContainerId);
+
             textContent += post.videos.embedCode;
         }
 
@@ -132,3 +172,4 @@ addBtn.style.display = 'none';
             '</ons-list-item>';
     }
 }());
+
